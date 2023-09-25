@@ -18,9 +18,5 @@ idx_MAtlantic = (CNTY_CENSUS.DIVNAME == "Middle Atlantic");
 idx_SAtlantic = (CNTY_CENSUS.DIVNAME == "South Atlantic");
 idx_NEngland = (CNTY_CENSUS.DIVNAME == "New England");
 
-pacific_cntys = CNTY_CENSUS(idx_pacific, :);
-pacific_cntys_sorted = sortrows(pacific_cntys, "POPESTIMATE2021", 'descend');
-max = pacific_cntys_sorted(1, :);
-
-
+pacific_cnty
 
