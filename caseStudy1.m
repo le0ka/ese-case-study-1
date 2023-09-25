@@ -1,4 +1,5 @@
 %Case Study 1 initial commit
 load COVIDbyCounty.mat;
 
-Test123
+plot(dates, CNTY_COVID);
+legend(CNTY_CENSUS.CTYNAME);
