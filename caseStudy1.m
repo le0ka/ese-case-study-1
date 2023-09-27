@@ -40,11 +40,10 @@ end
 
 pacific_training_data = zeros(height(pacific_training_cntys), 156);
 
-for j = 1:height(pacific_training_cntys)
-   index = pacific_training_cntys(j, :).RowNumber;
-   disp(CNTY_COVID(index));
-   pacific_training_data(i, :) = CNTY_COVID(index, :);
-end
+index = zeros(height(pacific_training_data),1);
+index = pacific_training_cntys.RowNumber;
+pacific_training_data = CNTY_COVID(index, :);
+
 
 %[idx, C] = kmeans(pacific_training_data, 1);
 
