@@ -40,17 +40,24 @@ end
 
 pacific_training_data = zeros(height(pacific_training_cntys), 156);
 
-index = zeros(height())
+index = zeros(height(pacific_training_data),1);
 index = pacific_training_cntys.RowNumber;
+pacific_training_data = CNTY_COVID(index, :);
 
-for j = 1:height(pacific_training_cntys)
-   index = pacific_training_cntys(j, :).RowNumber;
-   disp(CNTY_COVID(index, :));
-   pacific_training_data(i, :) = CNTY_COVID(index, :);
-end
 
-%[idx, C] = kmeans(pacific_training_data, 1);
+[idx, C] = kmeans(pacific_training_data, 2);
 
+
+% Create tables for each cluster
+cluster1_data = pacific_training_cntys(idx == 1, :);
+cluster2_data = CNTY_CENSUS(idx == 2, :);
+
+% Display data for each cluster
+disp("Cluster 1 Data:");
+disp(cluster1_data);
+
+disp("Cluster 2 Data:");
+disp(cluster2_data);
 % lop of last 25 % of data from training set to be used as test data 
 % 9 centroids ? one for each region
 

@@ -44,17 +44,20 @@ index = zeros(height(pacific_training_data),1);
 index = pacific_training_cntys.RowNumber;
 pacific_training_data = CNTY_COVID(index, :);
 
-
+numcentroids = 3;
 [idx, C] = kmeans(pacific_training_data, 2);
 
 
-%Broken becuase idexes changed - fix now!!!!!!!!!!!!
-logInd1 = (idx == 1);
-logInd2 = (idx == 2);
+% Create tables for each cluster
+cluster1_data = pacific_training_cntys(idx == 1, :);
+cluster2_data = pacific_training_cntys(idx == 2, :);
 
-disp(CNTY_CENSUS(logInd1, :));
-disp(CNTY_CENSUS(logInd2, :));
+% Display data for each cluster
+disp("Cluster 1 Data:");
+disp(cluster1_data);
 
+disp("Cluster 2 Data:");
+disp(cluster2_data);
 % lop of last 25 % of data from training set to be used as test data 
 % 9 centroids ? one for each region
 
