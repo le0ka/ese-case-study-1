@@ -44,20 +44,38 @@ index = zeros(height(pacific_training_data),1);
 index = pacific_training_cntys.RowNumber;
 pacific_training_data = CNTY_COVID(index, :);
 
-numcentroids = 3;
-[idx, C] = kmeans(pacific_training_data, 2);
+numcentroids = 5;
+num_replicates = 10;  
+distance_metric = 'cosine'; 
 
 
-% Create tables for each cluster
-cluster1_data = pacific_training_cntys(idx == 1, :);
-cluster2_data = pacific_training_cntys(idx == 2, :);
+[idx, C] = kmeans(pacific_training_data, numcentroids);
+
+% Create cell arrays to hold cluster data
+cluster_data = cell(1, numcentroids);
 
 % Display data for each cluster
-disp("Cluster 1 Data:");
-disp(cluster1_data);
+for i = 1:numcentroids
+    cluster_data{i} = pacific_training_cntys(idx == i, :);
+    fprintf('Cluster %d Data:\n', i);
+    disp(cluster_data{i});
+end
 
-disp("Cluster 2 Data:");
-disp(cluster2_data);
+silhouette_vals = silhouette(pacific_training_data, idx);
+
+figure;
+silhouette(pacific_training_data, idx);
+
+xlabel('Silhouette Value');
+ylabel('Cluster');
+title('Silhouette Plot');
+
+avg_silhouette = mean(silhouette_vals);
+fprintf('Average Silhouette Score: %.4f\n', avg_silhouette);
+Avg_Centroid = mean(C, 1); %Create average centroid to represent the average of all of the centroids d
+
+
+
 % lop of last 25 % of data from training set to be used as test data 
 % 9 centroids ? one for each region
 
