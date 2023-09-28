@@ -1,7 +1,6 @@
 load COVIDbyCounty.mat;
 
-
-    numcentroids = 1;
+    numcentroids = 5;
     number_replicates = 10;
     distance = 'cosine';
 
@@ -103,6 +102,7 @@ for i = 1:numOverallCentroids
 end
 % Calculate the overall silhouette value
 silhouette_valsOverall = silhouette(CNTY_COVID, idxOverall);
+bar(silhouette_valsOverall)
 
 mean_silhouetteOverall = mean(silhouette_valsOverall);
 fprintf('Overall Silhouette Score: %.4f\n', mean_silhouetteOverall);
