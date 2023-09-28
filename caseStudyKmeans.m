@@ -1,8 +1,8 @@
 load COVIDbyCounty.mat;
 
 
-    numcentroids = 2;
-    number_replicates = 100;
+    numcentroids = 1;
+    number_replicates = 10;
     distance = 'cosine';
 
 
@@ -84,7 +84,26 @@ for region_idx = 1:length(regions)
     
     % Print the average silhouette value for the current region
     fprintf('Average Silhouette Score for Region %s: %.4f\n', current_region, avg_silhouette);
+
+    region_average_centroids(region_idx, :) = mean(C, 1);
 end
 mean_silhouette = mean([region_Pacific_average_silhouette, region_Mountain_average_silhouette, region_West_South_Central_average_silhouette, region_West_North_Central_average_silhouette, region_East_North_Central_average_silhouette, region_East_South_Central_average_silhouette, region_Middle_Atlantic_average_silhouette, region_South_Atlantic_average_silhouette, region_New_England_average_silhouette]);
 fprintf('Mean Silhouette Score for All Regions: %.4f\n', mean_silhouette);
+
+numOverallCentroids = 9;
+
+% Perform k-means clustering using the region_average_centroids as initial centroids
+[idxOverall, COverall] = kmeans(CNTY_COVID, numOverallCentroids, 'Start', region_average_centroids);
+
+% Display the overall centroids
+for i = 1:numOverallCentroids
+    fprintf('Data for Overall Centroid %d:\n', i);
+    centroidData = CNTY_CENSUS(idxOverall == i, :);
+    disp(centroidData);
+end
+% Calculate the overall silhouette value
+silhouette_valsOverall = silhouette(CNTY_COVID, idxOverall);
+
+mean_silhouetteOverall = mean(silhouette_valsOverall);
+fprintf('Overall Silhouette Score: %.4f\n', mean_silhouetteOverall);
 
