@@ -1,5 +1,11 @@
 load COVIDbyCounty.mat;
 
+
+    numcentroids = 2;
+    number_replicates = 100;
+    distance = 'cosine';
+
+
 regions = ["Pacific", "Mountain", "West South Central", "West North Central", ...
            "East North Central", "East South Central", "Middle Atlantic", ...
            "South Atlantic", "New England"];
@@ -47,11 +53,9 @@ for region_idx = 1:length(regions)
     index = region_training_cntys.RowNumber;
     region_training_data = CNTY_COVID(index, :);
 
-    numcentroids = 5;
-    num_replicates = 10;
-    distance_metric = 'cosine';
 
-    [idx, C] = kmeans(region_training_data, numcentroids);
+
+    [idx, C] = kmeans(region_training_data, numcentroids, 'Replicates', number_replicates, 'Distance', distance);
 
     % Store data for the current region in separate variables
     cluster_data = cell(1, numcentroids);
@@ -81,3 +85,6 @@ for region_idx = 1:length(regions)
     % Print the average silhouette value for the current region
     fprintf('Average Silhouette Score for Region %s: %.4f\n', current_region, avg_silhouette);
 end
+mean_silhouette = mean([region_Pacific_average_silhouette, region_Mountain_average_silhouette, region_West_South_Central_average_silhouette, region_West_North_Central_average_silhouette, region_East_North_Central_average_silhouette, region_East_South_Central_average_silhouette, region_Middle_Atlantic_average_silhouette, region_South_Atlantic_average_silhouette, region_New_England_average_silhouette]);
+fprintf('Mean Silhouette Score for All Regions: %.4f\n', mean_silhouette);
+
