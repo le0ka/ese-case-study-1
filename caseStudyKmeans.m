@@ -1,13 +1,17 @@
 load COVIDbyCounty.mat;
 
-    numcentroids = 5;
+    numcentroids = 3;
     number_replicates = 10;
     distance = 'cosine';
+    total_centroids = numcentroids*9;
+    centroids_cell = cell(1, length(regions));
 
-
+cluster_data_all_regions = cell(1, length(regions));
 regions = ["Pacific", "Mountain", "West South Central", "West North Central", ...
            "East North Central", "East South Central", "Middle Atlantic", ...
            "South Atlantic", "New England"];
+all_centroids_matrix = [];
+
 
 for region_idx = 1:length(regions)
     current_region = regions(region_idx);
@@ -79,23 +83,26 @@ for region_idx = 1:length(regions)
     assignin('base', strcat(variable_name, '_region_name'), current_region);
     assignin('base', strcat(variable_name, '_cluster_data'), cluster_data);
     assignin('base', strcat(variable_name, '_average_silhouette'), avg_silhouette);
-    assignin('base', strcat(variable_name, '_average_centroid'), mean(C, 1));
-    
+    assignin('base', strcat(variable_name, '_centroids'), C);
+    centroids_cell{region_idx} = C;
+
     % Print the average silhouette value for the current region
     fprintf('Average Silhouette Score for Region %s: %.4f\n', current_region, avg_silhouette);
+    all_centroids_matrix = [all_centroids_matrix; C];
 
-    region_average_centroids(region_idx, :) = mean(C, 1);
+
+
 end
 mean_silhouette = mean([region_Pacific_average_silhouette, region_Mountain_average_silhouette, region_West_South_Central_average_silhouette, region_West_North_Central_average_silhouette, region_East_North_Central_average_silhouette, region_East_South_Central_average_silhouette, region_Middle_Atlantic_average_silhouette, region_South_Atlantic_average_silhouette, region_New_England_average_silhouette]);
 fprintf('Mean Silhouette Score for All Regions: %.4f\n', mean_silhouette);
+assignin('base', 'all_region_centroids', centroids_cell);
 
-numOverallCentroids = 9;
 
 % Perform k-means clustering using the region_average_centroids as initial centroids
-[idxOverall, COverall] = kmeans(CNTY_COVID, numOverallCentroids, 'Start', region_average_centroids);
+[idxOverall, COverall] = kmeans(CNTY_COVID, total_centroids, 'Start', all_centroids_matrix);
 
 % Display the overall centroids
-for i = 1:numOverallCentroids
+for i = 1:total_centroids
     fprintf('Data for Overall Centroid %d:\n', i);
     centroidData = CNTY_CENSUS(idxOverall == i, :);
     disp(centroidData);
