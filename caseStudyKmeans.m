@@ -11,6 +11,7 @@ regions = ["Pacific", "Mountain", "West South Central", "West North Central", ..
 cluster_data_all_regions = cell(1, length(regions));
 
 all_centroids_matrix = [];
+centroid_region_map = [];
 
 
 for region_idx = 1:length(regions)
@@ -106,6 +107,10 @@ for i = 1:total_centroids
     fprintf('Data for Overall Centroid %d:\n', i);
     centroidData = CNTY_CENSUS(idxOverall == i, :);
     disp(centroidData);
+    %assignin('base', strcat("finalCluster", string(i)), centroidData);
+    %assignin('base', strcat('region_of_cluster_', string(i)), mode(centroidData.DIVISION));
+    centroid_region_map = [centroid_region_map, mode(centroidData.DIVISION)];
+
 end
 % Calculate the overall silhouette value
 silhouette_valsOverall = silhouette(CNTY_COVID, idxOverall);
@@ -115,7 +120,7 @@ mean_silhouetteOverall = mean(silhouette_valsOverall);
 fprintf('Overall Silhouette Score: %.4f\n', mean_silhouetteOverall);
 
 %------------------------------------------------------------------------
-% creating full testing set
+% creating full testing set and classifying centroids
 
 full_test_set = vertcat(Pacific_testing_data, Mountain_testing_data, ...
     West_South_Central_testing_data, West_North_Central_testing_data, ...
@@ -123,4 +128,5 @@ full_test_set = vertcat(Pacific_testing_data, Mountain_testing_data, ...
     Middle_Atlantic_testing_data, South_Atlantic_testing_data, ...
     New_England_testing_data);
 
-save("centroidsAndTestData.mat", "full_test_set", "all_centroids_matrix");
+
+save("centroidsAndTestData.mat", "full_test_set", "all_centroids_matrix", "centroid_region_map");
