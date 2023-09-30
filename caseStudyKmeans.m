@@ -5,6 +5,7 @@ regions = ["Pacific", "Mountain", "West South Central", "West North Central", ..
     numcentroids = 3;
     number_replicates = 10;
     distance = 'cosine';
+    distance2 = 'cosine';
     total_centroids = numcentroids*9;
 
 
@@ -99,7 +100,7 @@ assignin('base', 'all_region_centroids', centroids_cell);
 
 
 % Perform k-means clustering using the region_average_centroids as initial centroids
-[idxOverall, COverall] = kmeans(CNTY_COVID, total_centroids, 'Start', all_centroids_matrix);
+[idxOverall, COverall] = kmeans(CNTY_COVID, total_centroids, 'Start', all_centroids_matrix, 'Distance', distance2);
 
 % Display the overall centroids
 for i = 1:total_centroids
