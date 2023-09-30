@@ -4,12 +4,10 @@ load COVIDbyCounty.mat;
     number_replicates = 10;
     distance = 'cosine';
     total_centroids = numcentroids*9;
-    centroids_cell = cell(1, length(regions));
+
 
 cluster_data_all_regions = cell(1, length(regions));
-regions = ["Pacific", "Mountain", "West South Central", "West North Central", ...
-           "East North Central", "East South Central", "Middle Atlantic", ...
-           "South Atlantic", "New England"];
+
 all_centroids_matrix = [];
 
 
