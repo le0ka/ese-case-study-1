@@ -1,5 +1,7 @@
 load COVIDbyCounty.mat;
-
+regions = ["Pacific", "Mountain", "West South Central", "West North Central", ...
+           "East North Central", "East South Central", "Middle Atlantic", ...
+           "South Atlantic", "New England"];
     numcentroids = 3;
     number_replicates = 10;
     distance = 'cosine';
