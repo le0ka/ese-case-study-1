@@ -114,3 +114,13 @@ bar(silhouette_valsOverall)
 mean_silhouetteOverall = mean(silhouette_valsOverall);
 fprintf('Overall Silhouette Score: %.4f\n', mean_silhouetteOverall);
 
+%------------------------------------------------------------------------
+% creating full testing set
+
+full_test_set = vertcat(Pacific_testing_data, Mountain_testing_data, ...
+    West_South_Central_testing_data, West_North_Central_testing_data, ...
+    East_North_Central_testing_data, East_South_Central_testing_data, ...
+    Middle_Atlantic_testing_data, South_Atlantic_testing_data, ...
+    New_England_testing_data);
+
+save("centroidsAndTestData.mat", "full_test_set", "all_centroids_matrix");
