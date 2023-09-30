@@ -1,3 +1,4 @@
+% THIS FILE IS TOTALLY INCORRECT!!!!!!!!!!!!!!!!!!
 load centroidsAndTestData.mat;
 load COVIDbyCounty.mat;
 
