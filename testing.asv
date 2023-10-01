@@ -1,21 +1,27 @@
+%Load in COVID data and centroids
 load centroidsAndTestData.mat;
 load COVIDbyCounty.mat;
 
-%This will loop through testing data and find centroid each one is closest
-%to, will print out correct or incorrect
+% Totals to calculate accuracy
 total_correct = 0;
 total_incorrect = 0;
+
+% loop through testing data
 rowNums = full_test_set.RowNumber;
 for i = 1: length(rowNums')
+    % get current covid data vector + region from testing data set
     index = rowNums(i);
     row = CNTY_COVID(index, :);
     curr_region = CNTY_CENSUS(index, :).DIVISION;
     
+    % initialize min values
     min_dist = intmax;
     min_centroid_region = 0;
     min_centroid = zeros(1, 256);
-
+    
+    % loop through all centroids
     for j = 1:height(all_centroids_matrix)
+        % get current 
         curr_centroid = all_centroids_matrix(j, :);
         curr_centroid_region = centroid_region_map(j);
         dist = norm(curr_centroid - row); 
