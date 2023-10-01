@@ -4,8 +4,8 @@ regions = ["Pacific", "Mountain", "West South Central", "West North Central", ..
            "South Atlantic", "New England"];
     numcentroids = 3;
     number_replicates = 10;
-    distance = 'cosine';
-    distance2 = 'cosine';
+    distance = 'cityblock';
+    distance2 = 'cityblock';
     total_centroids = numcentroids*9;
 
 
