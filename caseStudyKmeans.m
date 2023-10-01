@@ -1,24 +1,27 @@
 load COVIDbyCounty.mat;
+
+%Used a list of all of the regions rather than a for loop with numbers so
+%they can be assignes as variables later in the code
 regions = ["Pacific", "Mountain", "West South Central", "West North Central", ...
            "East North Central", "East South Central", "Middle Atlantic", ...
            "South Atlantic", "New England"];
-    numcentroids = 3;
+    numcentroids = 3; %Number of Centroids for each region
     number_replicates = 10;
-    distance = 'cityblock';
-    distance2 = 'cityblock';
+    distance = 'cityblock'; % Distance metric used by kmeans in the initial clustering of regions
+    distance2 = 'cityblock'; % Distance metric used by kmeans in the final creation of centroids
     total_centroids = numcentroids*9;
 
 
 cluster_data_all_regions = cell(1, length(regions));
 
-all_centroids_matrix = [];
-centroid_region_map = [];
+all_centroids_matrix = []; %creates an empty matrix that will end up storing all of the  final centroids
+centroid_region_map = []; %assigns the centroids to be assosicated to a certain region
 
 
-for region_idx = 1:length(regions)
+for region_idx = 1:length(regions) %this is the large for loop that completes all of the proceses that need to be done to all 9 centroids to save space and make code more efficient.
     current_region = regions(region_idx);
     
-    idx_region = (CNTY_CENSUS.DIVNAME == current_region);
+    idx_region = (CNTY_CENSUS.DIVNAME == current_region); %Sets the current region we are looping through
     
     numRows = size(CNTY_CENSUS, 1);
     rowNumber = (1:numRows);
@@ -26,13 +29,13 @@ for region_idx = 1:length(regions)
     CNTY_CENSUS.RowNumber = rowNumber';
 
     region_cntys = CNTY_CENSUS(idx_region, :);
-    region_cntys_sorted = sortrows(region_cntys, "POPESTIMATE2021", 'descend');
+    region_cntys_sorted = sortrows(region_cntys, "POPESTIMATE2021", 'descend'); %sorts the data to be in greatest to smallest number of covid cases per region
     max = region_cntys_sorted(1, :);
 
     region_testing_cntys = table();
     region_training_cntys = table();
 
-    for i = 1:size(region_cntys_sorted, 1)
+    for i = 1:size(region_cntys_sorted, 1) %This for loop goes through all of the data and assigns it to seperate testing and training sets. It is sorted by population and each fifth entry gets removed and added to the testing set
         if mod(i, 5) == 0
             region_testing_cntys = [region_testing_cntys; region_cntys_sorted(i, :)];
         else
@@ -54,13 +57,13 @@ for region_idx = 1:length(regions)
 
     region_training_data = zeros(height(region_training_cntys), 156);
 
-    index = zeros(height(region_training_data),1);
+    index = zeros(height(region_training_data),1); % creates a new matrix "index" that has the number of rows of the training data by 1
     index = region_training_cntys.RowNumber;
     region_training_data = CNTY_COVID(index, :);
 
 
 
-    [idx, C] = kmeans(region_training_data, numcentroids, 'Replicates', number_replicates, 'Distance', distance);
+    [idx, C] = kmeans(region_training_data, numcentroids, 'Replicates', number_replicates, 'Distance', distance); %completes the kmeans with x number of centroids for each division
 
     % Store data for the current region in separate variables
     cluster_data = cell(1, numcentroids);
