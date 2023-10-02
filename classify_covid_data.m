@@ -1,6 +1,8 @@
 %Load in COVID data and centroids
 load centroidsAndTestData.mat;
 load COVIDbyCounty.mat;
+run("caseStudyKmeans.m");
+
 
 % Totals to calculate accuracy
 total_correct = 0;

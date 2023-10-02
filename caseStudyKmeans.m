@@ -6,7 +6,7 @@ regions = ["Pacific", "Mountain", "West South Central", "West North Central", ..
            "East North Central", "East South Central", "Middle Atlantic", ...
            "South Atlantic", "New England"];
     numcentroids = 3; %Number of Centroids for each region
-    number_replicates = 10;
+    number_replicates = 3;
     distance = 'cityblock'; % Distance metric used by kmeans in the initial clustering of regions
     distance2 = 'cityblock'; % Distance metric used by kmeans in the final creation of centroids
     total_centroids = numcentroids*9;
